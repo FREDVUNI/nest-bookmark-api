@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-
 export class PrismaService extends PrismaClient {
-    constructor(){
-        super({
-            datasources:{
-                db:{
-                    url:'postgresql://postgres:vuni@localhost:5434/bookmark?schema=public'
-                }
-            }
-        })  
-    }
+  constructor() {
+    super({
+      datasources: {
+        db: {
+          url: 'postgresql://postgres:vuni@localhost:5434/nest?schema=public',
+        },
+      },
+    });
+  }
 }
