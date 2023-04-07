@@ -8,7 +8,7 @@ export class PrismaService extends PrismaClient {
         super({
             datasources:{
                 db:{
-                    url:'postgresql://postgres:vuni@localhost:5434/nest?schema=public'
+                    url:'postgresql://postgres:vuni@localhost:5434/bookmark?schema=public'
                 }
             }
         })  
