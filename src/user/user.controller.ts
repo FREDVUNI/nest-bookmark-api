@@ -12,7 +12,7 @@ export class UserController {
     return user;
   }
   @Patch()
-  editUser(@GetUser() userId:number){
-    return userId
+  editUser(@GetUser() userId: number) {
+    return userId;
   }
 }
