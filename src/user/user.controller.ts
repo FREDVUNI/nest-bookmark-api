@@ -9,9 +9,7 @@ import { UpdateUserDto } from './dto';
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UserController {
-  constructor(private userService:UserService){
-    
-  }
+  constructor(private userService: UserService) {}
 
   @Get('me')
   profile(@GetUser() user: User) {
@@ -19,7 +17,7 @@ export class UserController {
   }
 
   @Patch('/profile')
-  editUser(@GetUser('id') userId: number, @Body() dto:UpdateUserDto) {
-    return this.userService.update(userId,dto);
+  editUser(@GetUser('id') userId: number, @Body() dto: UpdateUserDto) {
+    return this.userService.update(userId, dto);
   }
 }
