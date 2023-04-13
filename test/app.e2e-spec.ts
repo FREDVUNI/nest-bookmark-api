@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
 import * as pactum from 'pactum';
+import { UpdateUserDto } from '../src/user/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -21,7 +22,7 @@ describe('App e2e', () => {
       }),
     );
     await app.init();
-    await app.listen(3333);
+    await app.listen(3000);
 
     prisma = app.get(PrismaService);
     await prisma.cleanUp();
@@ -106,7 +107,20 @@ describe('App e2e', () => {
           .expectStatus(200);
       });
     });
-    describe('Edit user', () => {});
+    describe('Edit user', () => {
+      it('Edit the current user', () => {
+        const dto: UpdateUserDto = {
+          firstName: 'Fred',
+          email: 'fred@gmail.com',
+        };
+        return pactum
+          .spec()
+          .patch('/users/profile')
+          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+          .withBody(dto)
+          .expectStatus(200);
+      });
+    });
   });
   describe('Bookmark', () => {
     describe('Create Bookmark', () => {});
