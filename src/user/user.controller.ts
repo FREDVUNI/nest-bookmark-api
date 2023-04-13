@@ -11,7 +11,7 @@ export class UserController {
   profile(@GetUser() user: User) {
     return user;
   }
-  @Patch()
+  @Patch('/:userId')
   editUser(@GetUser() userId: number) {
     return userId;
   }
