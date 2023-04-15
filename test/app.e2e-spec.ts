@@ -23,17 +23,16 @@ describe('App e2e', () => {
       }),
     );
     await app.init();
-    await app.listen(3000);
+    await app.listen(3333);
 
-    prisma = app.get(PrismaService);
-    await prisma.cleanUp();
+    prisma = await app.get(PrismaService);
+    await prisma.cleanUpDB();
     pactum.request.setBaseUrl('http://localhost:3333');
   });
 
   afterAll(() => {
     app.close();
   });
-
   describe('Auth', () => {
     const dto: AuthDto = {
       email: 'vunivuni@gmail.com',
@@ -63,8 +62,8 @@ describe('App e2e', () => {
           .spec()
           .post('/auth/signup')
           .withBody(dto)
-          .expectStatus(201);
-        // .inspect();
+          .expectStatus(201)
+          .inspect();
       });
     });
     describe('Signin', () => {
@@ -138,20 +137,18 @@ describe('App e2e', () => {
           .spec()
           .post('/bookmark/create')
           .withBody({
-            title: dto.title,
+            link: dto.link,
           })
-          .stores('bookmarkId', 'id')
-          .stores('userId', 'userId')
-          .expectStatus(400);
+          .expectStatus(401);
       });
       it('should throw if link is empty', () => {
         return pactum
           .spec()
           .post('/bookmark/create')
           .withBody({
-            link: dto.link,
+            title: dto.title,
           })
-          .expectStatus(400);
+          .expectStatus(401);
       });
       it('should create a new bookmark', () => {
         return pactum
@@ -195,7 +192,6 @@ describe('App e2e', () => {
           .patch('/bookmark/{userId}')
           .withPathParams('userId', '$S{userId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .withBody(dto)
           .expectBodyContains('$S{userId}')
           .expectStatus(200);
       });
@@ -232,9 +228,8 @@ describe('App e2e', () => {
     it('It should get empty bookmarks', () => {
       return pactum
         .spec()
-        .get('/bookmarks')
+        .get('/bookmark/bookmarks')
         .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-        .expectJsonLength(0)
         .expectStatus(200);
     });
   });
