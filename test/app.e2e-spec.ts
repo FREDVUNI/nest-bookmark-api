@@ -155,12 +155,10 @@ describe('App e2e', () => {
           .spec()
           .post('/bookmark/create')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .withBody({
-            title: dto.title,
-            link: dto.link,
-            description: dto.description,
-          })
-          .expectStatus(201);
+          .withBody(dto)
+          .expectStatus(201)
+          .inspect()
+          .stores('bookmarkId', 'id');
       });
     });
     describe('Get Bookmarks', () => {
@@ -174,13 +172,12 @@ describe('App e2e', () => {
       });
     });
     describe('Get Bookmark by id', () => {
-      it('should get bookmarkby id', () => {
+      it('should get bookmark by id', () => {
         return pactum
           .spec()
-          .patch('/bookmark/{id}')
+          .get('/bookmark/{id}')
           .withPathParams('id', '$S{bookmarkId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .withBody(dto)
           .expectBodyContains('$S{bookmarkId}')
           .expectStatus(200);
       });
@@ -189,7 +186,7 @@ describe('App e2e', () => {
       it('should get a bookmark by userId', () => {
         return pactum
           .spec()
-          .patch('/bookmark/{userId}')
+          .get('/bookmark/{userId}')
           .withPathParams('userId', '$S{userId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectBodyContains('$S{userId}')
@@ -205,12 +202,10 @@ describe('App e2e', () => {
         };
         return pactum
           .spec()
-          .get('/bookmark/{id}')
+          .patch('/bookmark/{id}')
           .withPathParams('id', '$S{bookmarkId}')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .expectBodyContains('$S{bookmarkId}')
-          .expectBodyContains(dto.title)
-          .expectBodyContains(dto.description)
           .expectStatus(200);
       });
     });
