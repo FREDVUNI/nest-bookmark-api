@@ -36,7 +36,7 @@ describe('App e2e', () => {
 
   describe('Auth', () => {
     const dto: AuthDto = {
-      email: 'codersworld@gmail.com',
+      email: 'vunivuni@gmail.com',
       password: 'codersone',
     };
     describe('Signup', () => {
@@ -64,7 +64,7 @@ describe('App e2e', () => {
           .post('/auth/signup')
           .withBody(dto)
           .expectStatus(201);
-        // .inspect(); to get a response
+        // .inspect();
       });
     });
     describe('Signin', () => {
@@ -109,17 +109,20 @@ describe('App e2e', () => {
       });
     });
     describe('Edit user', () => {
+      const dto: UpdateUserDto = {
+        firstName: 'Fred',
+        email: 'fred@gmail.com',
+      };
       it('Edit the current user', () => {
-        const dto: UpdateUserDto = {
-          firstName: 'Fred',
-          email: 'fred@gmail.com',
-        };
         return pactum
           .spec()
           .patch('/users/profile')
           .withHeaders({ Authorization: 'Bearer $S{userAt}' })
           .withBody(dto)
-          .expectStatus(200);
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email)
+          .inspect();
       });
     });
   });
@@ -226,15 +229,13 @@ describe('App e2e', () => {
           .expectStatus(204);
       });
     });
-    describe('Empty bookmarks', () => {
-      it('should get empty bookmarks', () => {
-        return pactum
-          .spec()
-          .get('/bookmarks')
-          .withHeaders({ Authorization: 'Bearer $S{userAt}' })
-          .expectStatus(200)
-          .expectJsonLength(0);
-      });
+    it('It should get empty bookmarks', () => {
+      return pactum
+        .spec()
+        .get('/bookmarks')
+        .withHeaders({ Authorization: 'Bearer $S{userAt}' })
+        .expectJsonLength(0)
+        .expectStatus(200);
     });
   });
 });

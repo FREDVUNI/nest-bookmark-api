@@ -22,15 +22,8 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           email: dto.email,
-          hash,
+          hash: hash,
         },
-        // select:{
-        //     email:true,
-        //     firstName:true,
-        //     lastName:true,
-        //     createdAt:true,
-        //     updatedAt:true
-        // }
       });
       // delete user.hash;
 

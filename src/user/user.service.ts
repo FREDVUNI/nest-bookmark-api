@@ -11,7 +11,9 @@ export class UserService {
       where: {
         id: userId,
       },
-      data: dto,
+      data: {
+        ...dto,
+      },
     });
   }
 }
