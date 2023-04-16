@@ -41,7 +41,7 @@ export class BookmarkController {
 
   @Patch('/:id')
   update(
-    @GetUser() userId: number,
+    @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) bookmarkId: number,
     @Body() dto: UpdateBookmarkDto,
   ) {
@@ -51,7 +51,9 @@ export class BookmarkController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/:id')
   delete(
-    @GetUser() userId: number,
+    @GetUser('id') userId: number,
     @Param('id', ParseIntPipe) bookmarkId: number,
-  ) {}
+  ) {
+    return this.bookmarkService.deleteBookmark(userId, bookmarkId);
+  }
 }
